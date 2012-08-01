@@ -67,56 +67,65 @@ public class ParseClass {
 	}
 
 	ParseClass() {
+		String userIDPrev = userID;
 		userID = JOptionPane.showInputDialog("Access Number");
-		acctID = JOptionPane.showInputDialog("Credit Card Number");
-		newBalance = JOptionPane.showInputDialog("Balance At End of Statement (numerical value)");
-
-		transInputs();
-	}
-	
-	public void transInputs() {
-		final JFrame frame = new JFrame();
-		JPanel panel = new JPanel();
-		final JTextArea textInput = new JTextArea("", 50, 70);
-		JScrollPane scrollPane = new JScrollPane(textInput);
-		panel.add(scrollPane);
-		JButton button = new JButton("Enter");
-		button.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				setPaymentTransString(textInput.getText());
-
-				frame.dispose();
-
-				final JFrame frame1 = new JFrame();
-				JPanel panel1 = new JPanel();
-				final JTextArea textInput1 = new JTextArea("", 50, 70);
-				JScrollPane scrollPane1 = new JScrollPane(textInput1);
-				panel1.add(scrollPane1);
-				JButton button1 = new JButton("Enter");
-				button1.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						setPurchaseTransString(textInput1.getText());
-
-						createQFX();
-
-						frame1.dispose();
-					}
-				});
-				panel1.add(button1);
-				frame1.add(panel1);
-				frame1.setTitle("Purchase Transaction");
-				frame1.setSize(800, 950);
-				frame1.show();
-
+		if (userID != userIDPrev) {
+			String acctIDPrev = acctID;
+			acctID = JOptionPane.showInputDialog("Credit Card Number");
+			if (acctID != acctIDPrev) {
+				transInputs();
 			}
-		});
-		panel.add(button);
-		frame.add(panel);
-		frame.setTitle("Payment Transaction");
-		frame.setSize(800, 950);
-		frame.show();
+		}
+	}
+
+	public void transInputs() {
+		String newBalancePrev = newBalance;
+		newBalance = JOptionPane.showInputDialog("Balance At End of Statement (numerical value)");
+		if (newBalance != newBalancePrev) {
+
+			final JFrame frame = new JFrame();
+			JPanel panel = new JPanel();
+			final JTextArea textInput = new JTextArea("", 50, 70);
+			JScrollPane scrollPane = new JScrollPane(textInput);
+			panel.add(scrollPane);
+			JButton button = new JButton("Enter");
+			button.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					setPaymentTransString(textInput.getText());
+
+					frame.dispose();
+
+					final JFrame frame1 = new JFrame();
+					JPanel panel1 = new JPanel();
+					final JTextArea textInput1 = new JTextArea("", 50, 70);
+					JScrollPane scrollPane1 = new JScrollPane(textInput1);
+					panel1.add(scrollPane1);
+					JButton button1 = new JButton("Enter");
+					button1.addActionListener(new ActionListener() {
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							setPurchaseTransString(textInput1.getText());
+
+							createQFX();
+
+							frame1.dispose();
+						}
+					});
+					panel1.add(button1);
+					frame1.add(panel1);
+					frame1.setTitle("Purchase Transaction");
+					frame1.setSize(800, 950);
+					frame1.show();
+
+				}
+			});
+			panel.add(button);
+			frame.add(panel);
+			frame.setTitle("Payment Transaction");
+			frame.setSize(800, 950);
+			frame.show();
+		}
 	}
 
 	void setPurchaseTransString(String string) {
@@ -207,13 +216,13 @@ public class ParseClass {
 		Collections.sort(transList, comparator);
 
 		for (List<String> transaction : transList) {
-			xmlDisplayStringBuilder.append("\n" + createIndent(6) + "<STMTTRN>");
-			xmlDisplayStringBuilder.append("\n" + createIndent(7) + "<TRNTYPE>" + transaction.get(0));
-			xmlDisplayStringBuilder.append("\n" + createIndent(7) + "<DTPOSTED>" + transaction.get(1));
-			xmlDisplayStringBuilder.append("\n" + createIndent(7) + "<TRNAMT>" + transaction.get(2));
-			xmlDisplayStringBuilder.append("\n" + createIndent(7) + "<FITID>" + transaction.get(3));
-			xmlDisplayStringBuilder.append("\n" + createIndent(7) + "<NAME>" + transaction.get(4));
-			xmlDisplayStringBuilder.append("\n" + createIndent(6) + "</STMTTRN>");
+			xmlDisplayStringBuilder.append("\n" + createIndent(5) + "<STMTTRN>");
+			xmlDisplayStringBuilder.append("\n" + createIndent(6) + "<TRNTYPE>" + transaction.get(0));
+			xmlDisplayStringBuilder.append("\n" + createIndent(6) + "<DTPOSTED>" + transaction.get(1));
+			xmlDisplayStringBuilder.append("\n" + createIndent(6) + "<TRNAMT>" + transaction.get(2));
+			xmlDisplayStringBuilder.append("\n" + createIndent(6) + "<FITID>" + transaction.get(3));
+			xmlDisplayStringBuilder.append("\n" + createIndent(6) + "<NAME>" + transaction.get(4));
+			xmlDisplayStringBuilder.append("\n" + createIndent(5) + "</STMTTRN>");
 		}
 
 		/*for (List<String> transaction : paymentList) {
@@ -322,12 +331,21 @@ public class ParseClass {
 			}
 		});
 		panel.add(buttonSave);
-		JButton buttonRestart = new JButton("Next Statement");
-		buttonRestart.addActionListener(new ActionListener() {
+		JButton buttonNext = new JButton("Next Statement");
+		buttonNext.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				frame.dispose();
 				transInputs();
+			}
+		});
+		panel.add(buttonNext);
+		JButton buttonRestart = new JButton("New Account");
+		buttonRestart.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				frame.dispose();
+				new ParseClass();
 			}
 		});
 		panel.add(buttonRestart);
@@ -340,7 +358,7 @@ public class ParseClass {
 	public class QFXFileFilter extends FileFilter {
 		public boolean accept(File f) {
 			if (f.isDirectory()) {
-				return false;
+				return true;
 			}
 			return f.getName().endsWith(".qfx");
 		}
