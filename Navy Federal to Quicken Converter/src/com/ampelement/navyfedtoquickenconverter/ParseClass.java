@@ -1,4 +1,4 @@
-package com.ampelement.quickennavyfedparser;
+package com.ampelement.navyfedtoquickenconverter;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
