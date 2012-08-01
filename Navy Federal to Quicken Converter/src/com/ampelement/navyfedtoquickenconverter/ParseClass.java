@@ -71,6 +71,10 @@ public class ParseClass {
 		acctID = JOptionPane.showInputDialog("Credit Card Number");
 		newBalance = JOptionPane.showInputDialog("Balance At End of Statement (numerical value)");
 
+		transInputs();
+	}
+	
+	public void transInputs() {
 		final JFrame frame = new JFrame();
 		JPanel panel = new JPanel();
 		final JTextArea textInput = new JTextArea("", 50, 70);
@@ -80,7 +84,7 @@ public class ParseClass {
 		button.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				setPurchaseTransString(textInput.getText());
+				setPaymentTransString(textInput.getText());
 
 				frame.dispose();
 
@@ -93,7 +97,7 @@ public class ParseClass {
 				button1.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						setPaymentTransString(textInput1.getText());
+						setPurchaseTransString(textInput1.getText());
 
 						createQFX();
 
@@ -102,7 +106,7 @@ public class ParseClass {
 				});
 				panel1.add(button1);
 				frame1.add(panel1);
-				frame1.setTitle("Payment Transaction");
+				frame1.setTitle("Purchase Transaction");
 				frame1.setSize(800, 950);
 				frame1.show();
 
@@ -110,7 +114,7 @@ public class ParseClass {
 		});
 		panel.add(button);
 		frame.add(panel);
-		frame.setTitle("Purchase Transaction");
+		frame.setTitle("Payment Transaction");
 		frame.setSize(800, 950);
 		frame.show();
 	}
@@ -286,8 +290,8 @@ public class ParseClass {
 		final JTextArea textInput = new JTextArea(xmlDisplayStringBuilder.toString(), 50, 90);
 		JScrollPane scrollPane = new JScrollPane(textInput);
 		panel.add(scrollPane);
-		JButton button = new JButton("Save File");
-		button.addActionListener(new ActionListener() {
+		JButton buttonSave = new JButton("Save File");
+		buttonSave.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser fc = new JFileChooser();
@@ -317,7 +321,16 @@ public class ParseClass {
 				}
 			}
 		});
-		panel.add(button);
+		panel.add(buttonSave);
+		JButton buttonRestart = new JButton("Next Statement");
+		buttonRestart.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				frame.dispose();
+				transInputs();
+			}
+		});
+		panel.add(buttonRestart);
 		frame.add(panel);
 		frame.setTitle("Quicken Output");
 		frame.setSize(1100, 950);
